@@ -7,7 +7,11 @@ A Swift package for iOS that records what a user came to do as a typed task, fol
 [![CI](https://github.com/rajatslakhina/outcome-telemetry-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/rajatslakhina/outcome-telemetry-kit/actions/workflows/ci.yml)
 ![Swift 6](https://img.shields.io/badge/Swift-6.0-orange) ![Platforms](https://img.shields.io/badge/platforms-iOS%2017%20%7C%20macOS%2014%20%7C%20Linux-blue) ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-Demo app: (added after the companion repo is pushed — see below)
+**Demo app:** [outcome-telemetry-kit-demo-app](https://github.com/rajatslakhina/outcome-telemetry-kit-demo-app) is a separate Xcode project. It depends on this package as a remote Swift package (up to next major from `1.0.0`, with a committed `Package.resolved` at the `v1.0.0` tag) and runs a 240-install fleet simulation plus one device's pipeline (offline back-pressure, lost acks) on the iOS Simulator.
+
+
+<p align="center"><img src="https://raw.githubusercontent.com/rajatslakhina/outcome-telemetry-kit-demo-app/main/Demo/Screenshots/1-fleet-report.png" width="300" alt="Demo app on an iOS Simulator (GitHub Actions): AI on vs holdout +5.6 pts, 95% CI +1.7 to +9.5, design effect 1.51; the confounded used-as-offered gap is +21.1 pts"></p>
+<p align="center"><sub>The demo app on an iOS Simulator in CI (not the author's Mac): the arm comparison next to the confounded exposure split.</sub></p>
 
 ---
 
@@ -128,7 +132,7 @@ The order of save and send matters. An independent review found the first versio
 - **CI:** the [Actions tab](https://github.com/rajatslakhina/outcome-telemetry-kit/actions) runs two jobs on every push to `main`, every pull request and on manual dispatch.
   - **Linux:** in the `swift:6.1` container, a clean warnings-as-errors build plus `swift test`. This compiles the core module; the SwiftUI module builds to nothing there.
   - **`macos-15`:** the same build and tests (which compile `OutcomeTelemetryUI` for macOS), then `xcodebuild` of the `OutcomeTelemetry-Package` scheme for `generic/platform=iOS Simulator` with warnings as errors (the iOS build of both modules).
-- **Simulator:** not run on the author's Mac. Access to Xcode and Simulator was granted, but Xcode had unrelated projects open and Simulator had devices booted, so nothing was clicked. The demo app was instead installed, launched and screenshotted on a GitHub-hosted macOS Simulator; the [demo repo](https://github.com/rajatslakhina/outcome-telemetry-kit-demo-app) says exactly what ran.
+- **Simulator:** not run on the author's Mac. Access to Xcode and Simulator was granted, but Xcode had unrelated projects open and Simulator had devices booted, so nothing was clicked. Instead, the demo repo's "Simulator run" workflow builds the app, then installs and launches it on an iPhone Simulator on GitHub's `macos-15` runner (Xcode 16.4) in three scenarios. It checks the process is alive after each one and commits the screenshots. The [demo repo](https://github.com/rajatslakhina/outcome-telemetry-kit-demo-app) has them and says exactly what ran.
 
 ## Limits
 
