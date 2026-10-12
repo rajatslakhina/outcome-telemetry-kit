@@ -248,6 +248,7 @@ public struct PipelineHealthView: View {
         case let .sent(_, tasks): return "sent \(tasks) tasks"
         case let .willRetry(_, attempt, delay): return "attempt \(attempt) failed, retry in \(delay / 1_000_000_000) s"
         case let .deadLettered(_, tasks): return "dead-lettered \(tasks) tasks"
+        case .writeAheadFailed: return "write-ahead save failed; nothing sent"
         }
     }
 }
