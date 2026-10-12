@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux · clean build (warnings as errors) + swift test
+    runs-on: ubuntu-latest
+    container: swift:6.1
+    steps:
+      - uses: actions/checkout@v6
+      - name: Clean build, warnings are errors
+        run: rm -rf .build && swift build --build-tests -Xswiftc -warnings-as-errors
+      - name: Tests
+        run: swift test
+
+  apple:
+    name: macOS · swift test + iOS Simulator build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+      - name: Toolchain
+        run: xcodebuild -version && swift --version
+      - name: Clean build, warnings are errors
+        run: rm -rf .build && swift build --build-tests -Xswiftc -warnings-as-errors
+      - name: Tests
+        run: swift test
+      - name: List schemes
+        run: xcodebuild -list
+      - name: xcodebuild for any iOS Simulator
+        run: |
+          xcodebuild build -scheme OutcomeTelemetry-Package \
+            -destination 'generic/platform=iOS Simulator' \
+            SWIFT_TREAT_WARNINGS_AS_ERRORS=YES CODE_SIGNING_ALLOWED=NO
